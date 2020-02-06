@@ -13,6 +13,9 @@
     state: present
     filename: docker
     update_cache: yes
+  environment:
+    http_proxy: "{{ http_proxy }}"
+    https_proxy: "{{ http_proxy }}"
 
 - name: Install docker-ce package
   apt:
@@ -29,7 +32,7 @@
 - name: Install docker compose
   pip:
     name: docker-compose
-    state: forcereinstall
+    state: present
   # TODO (msenin): move to root main.yaml
   environment:
     http_proxy: "{{ http_proxy }}"

@@ -9,8 +9,8 @@
 - import_tasks: create_master_instance.yml
   when: "group == 'master'"
 
-- import_tasks: create_slave_instance_daemon_set.yml
-  when:  "group == 'slaves-daemon-set'"
-
 - import_tasks: create_slave_instance_random_placement.yml
   when: "group == 'slaves-general-load'"
+
+- import_tasks: create_slave_instance_daemon_set.yml
+  when:  "group == 'slaves-daemon-set'"

@@ -20,14 +20,14 @@
       vars:
         group: 'slaves-daemon-set'
         instance_name: 'prometheus-slave'
-        assign_floating_ip: true
+        assign_floating_ip: false
 
     - role: create_os_resources
       vars:
         group: 'slaves-general-load'
         instance_count: 3
         instance_name: 'prometheus-slave'
-        assign_floating_ip: false
+        assign_floating_ip: true
 
 - name: Include basic vars for all hosts
   hosts: all
