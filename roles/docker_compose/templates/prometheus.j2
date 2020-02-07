@@ -25,6 +25,7 @@ scrape_configs:
         domain_name: "{{ openstack.clouds[0].auth.user_domain_name }}"
         region: "{{ openstack.clouds[0].region_name }}"
         port: {{ exporter_port }}
+        endpoint_type: internal
         # TODO (msenin): add certificates support
         tls_config:
           insecure_skip_verify: True

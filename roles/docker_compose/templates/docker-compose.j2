@@ -2,7 +2,8 @@ version: '2.1'
 
 services:
   prometheus:
-    image: prom/prometheus:v2.7.2
+    #image: prom/prometheus:v2.7.2
+    image: izadorozhna/prometheus:v2.7.2.patch
     volumes:
       - ./config:/prometheus
       - ./data/prometheus:/data
