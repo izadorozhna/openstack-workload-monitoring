@@ -2,10 +2,6 @@
   os_client_config:
     clouds: [ "{{ cloud }}" ]
 
-- name: Render cloud init script
-  set_fact:
-    cloudinit: "{{ lookup('template', './cloudinit.j2') }}"
-
 - import_tasks: create_master_instance.yml
   when: "group == 'master'"
 

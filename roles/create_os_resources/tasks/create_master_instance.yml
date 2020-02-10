@@ -1,3 +1,11 @@
+- name: Set fake private IP of master
+  set_fact:
+    master_instance_private_ip: "127.0.0.1"
+
+- name: Render cloud init script
+  set_fact:
+    cloudinit: "{{ lookup('template', './cloudinit.j2') }}"
+
 - name: Create new instance with prometheus, alert manager and alerta
   register: "os_hosts"
   os_server:
@@ -7,7 +15,7 @@
     cloud: "{{ cloud }}"
     image: "{{ image_id }}"
     key_name: "{{ key_name }}"
-    flavor: "{{ flavor_id }}"
+    flavor: "{{ master_flavor_id }}"
     security_groups: "{{ security_groups }}"
     floating_ip_pools: "{{ floating_ip_pools }}"
     nics: [ net-id: "{{ net_id }}" ]
@@ -24,6 +32,17 @@
     groups: "{{ group }}"
     instance_name: "{{ os_hosts['server']['name'] }}"
     ansible_host: "{{ os_hosts['server']['public_v4'] }}"
+
+- name: Add private host to inventory
+  add_host:
+    name: "{{ os_hosts['server']['private_v4'] }}"
+    ansible_user: "{{ instance_manage_user }}"
+    groups: "{{ group }}"
+    instance_name: "{{ os_hosts['server']['name'] }}"
+    ansible_host: "{{ os_hosts['server']['private_v4'] }}"
+
+- set_fact:
+    master_instance_private_ip: "{{ groups['master'][1] }}"
 
 - name: Wait for system to become reachable
   wait_for_connection:

@@ -5,8 +5,9 @@ key_name: mons
 
 image_id: c06cf767-d551-4978-95b9-31ceb7478579
 
-# create flavour
-flavor_id: da148996-dfbc-4dfb-856f-8f4a229df5f9
+# create 2 flavours
+master_flavor_id: da148996-dfbc-4dfb-856f-8f4a229df5f9
+slaves_flavor_id: 4
 
 # ----
 

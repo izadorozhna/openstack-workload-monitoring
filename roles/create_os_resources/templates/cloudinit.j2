@@ -1,6 +1,4 @@
 #cloud-config
-packages:
-  - prometheus-node-exporter
 preserve_sources_list: true
 apt_mirror: http://archive.ubuntu.com/ubuntu
 apt:
@@ -29,3 +27,25 @@ apt:
   proxy: {{ http_proxy }}
   http_proxy: {{ http_proxy }}
   https_proxy: {{ http_proxy }}
+setup_prometheus:
+  - &setup_prometheus |
+    if [[ "{{ instance_name }}" == 'prometheus-master' ]]; then
+      export http_proxy={{ http_proxy }}
+      export https_proxy={{ http_proxy }}
+      apt install apache2 -y
+      wget http://archive.ubuntu.com/ubuntu/pool/universe/p/prometheus-node-exporter/prometheus-node-exporter_0.15.2+ds-1_amd64.deb -O /var/www/html/prometheus-node-exporter_0.15.2+ds-1_amd64.deb
+    fi
+
+    if [[ "{{ assign_floating_ip }}" == 'False' ]]; then
+      packageName='prometheus-node-exporter_0.15.2+ds-1_amd64.deb'
+      wget {{ master_instance_private_ip }}:80/${packageName}
+      dpkg -i ${packageName}
+    else
+      export http_proxy={{ http_proxy }}
+      export https_proxy={{ http_proxy }}
+      apt update
+      apt install prometheus-node-exporter -y
+    fi
+
+runcmd:
+  - [bash, -cex, *setup_prometheus]

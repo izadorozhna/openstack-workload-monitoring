@@ -1,3 +1,10 @@
+- set_fact:
+    master_instance_private_ip: "{{ groups['master'][1] }}"
+
+- name: Render cloud init script
+  set_fact:
+    cloudinit: "{{ lookup('template', './cloudinit.j2') }}"
+
 - name: Retrieve all available Openstack hypervisors
   os_hypervisor_facts:
     enabled: True
@@ -13,7 +20,7 @@
     cloud: "{{ cloud }}"
     image: "{{ image_id }}"
     key_name: "{{ key_name }}"
-    flavor: "{{ flavor_id }}"
+    flavor: "{{ slaves_flavor_id }}"
     security_groups: "{{ security_groups }}"
     # TODO (msenin): make it random (?)
     auto_ip: "{{ assign_floating_ip }}"

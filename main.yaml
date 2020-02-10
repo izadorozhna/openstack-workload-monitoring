@@ -5,9 +5,8 @@
     - name: Include variables
       include_vars: vars/main.yaml
 
-- name: Create instances
+- name: Create master instance
   hosts: localhost
-#  strategy: free
   roles:
     - role: create_os_resources
       vars:
@@ -16,6 +15,9 @@
         instance_name: 'prometheus-master'
         assign_floating_ip: true
 
+- name: Create slave instances
+  hosts: localhost
+  roles:
     - role: create_os_resources
       vars:
         group: 'slaves-daemon-set'
