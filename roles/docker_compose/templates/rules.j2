@@ -9,3 +9,11 @@ groups:
     annotations:
       summary: "Instance {{ '{{' }} $labels.instance {{ '}}' }} down"
       description: "{{ '{{' }} $labels.instance {{ '}}' }} of job {{ '{{' }} $labels.job {{ '}}' }} has been down"
+
+  - alert: SNAT-Internet
+    expr: probe_success == 0
+    labels:
+      severity: critical
+    annotations:
+      summary: "VM {{ '{{' }} $labels.job {{ '}}' }} cannot ping {{ '{{' }} $labels.instance {{ '}}' }}"
+      description: "VM {{ '{{' }} $labels.job {{ '}}' }} cannot ping {{ '{{' }} $labels.instance {{ '}}' }}"

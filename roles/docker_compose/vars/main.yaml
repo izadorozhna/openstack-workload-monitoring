@@ -1,3 +1,7 @@
 exporter_port: 9100
 
 docker_compose_folder: /home/ubuntu/monitoring
+
+ping_target_1: 8.8.8.8
+ping_target_2: localhost
+ping_target_3: google.com
