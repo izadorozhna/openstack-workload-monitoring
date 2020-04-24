@@ -32,6 +32,7 @@ setup_prometheus:
     if [[ "{{ instance_name }}" == 'prometheus-master' ]]; then
       export http_proxy={{ http_proxy }}
       export https_proxy={{ http_proxy }}
+      apt update
       apt install apache2 -y
       wget http://archive.ubuntu.com/ubuntu/pool/universe/p/prometheus-node-exporter/prometheus-node-exporter_0.15.2+ds-1_amd64.deb -O /var/www/html/prometheus-node-exporter_0.15.2+ds-1_amd64.deb
     fi
