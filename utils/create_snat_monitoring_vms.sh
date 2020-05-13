@@ -10,7 +10,9 @@ mons_num=241
 name="_check_rt_case_$start_nubmer"
 
 ext_net=""
+mons_net=""
 master_internal_address=""
+# please check mons net ip range and edit it if needed; default is 192.168.10.0/23
 http_proxy=""
 https_proxy=""
 
@@ -47,10 +49,12 @@ neutron subnet-create --name subnet1$name --gateway 192.168.$number_1.1 --alloca
 #neutron subnet-create --name subnet2$name --gateway 10.20.$number_2.1 --allocation-pool start=10.20.$number_2.2,end=10.20.$number_2.254 --ip-version 4 net2$name 10.20.$number_2.0/24
 
 neutron router-interface-add router_$name subnet1$name
-port_id=$(openstack port create --network mons-net --fixed-ip ip-address=192.168.101.$mons_num mon_port$name | grep "| id" |awk '{print $4}' )
+port_id=$(openstack port create --network $mons_net --fixed-ip ip-address=192.168.10.$mons_num mon_port$name | grep "| id" |awk '{print $4}' )
 openstack router add port router_$name $port_id
 
-vm1=$(openstack server create --image Ubuntu1804-mons --flavor mons_slave --nic net-id=$ned1_id --security-group mons --security-group default --user-data /root/udd vm1$name | grep "| id" | awk '{print $4}')
+default_sg_uuid=$(openstack security group list --project mons | grep default | awk '{print $2}')
+
+vm1=$(openstack server create --image Ubuntu1804-mons --flavor mons_slave --nic net-id=$ned1_id --security-group mons --security-group $default_sg_uuid --user-data /root/udd vm1$name | grep "| id" | awk '{print $4}')
 #vm2=$(openstack server create --image Ubuntu1804 --flavor m1.medium --nic net-id=ad6ac89f-cde2-476e-8bca-6e831e285c1a --user-data /root/ud vm2$name | grep "| id" | awk '{print $4}')
 
 
@@ -59,5 +63,3 @@ vm1=$(openstack server create --image Ubuntu1804-mons --flavor mons_slave --nic 
 
 openstack server list | grep $name
 openstack router list | grep $name
-
-
